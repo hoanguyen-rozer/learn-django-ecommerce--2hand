@@ -57,7 +57,8 @@ def update_cart(request):
                 "removed": not added,
                 "cartItemCount": cart_obj.products.count(),
             }
-            return JsonResponse(json_data, status_code=400)
+            return JsonResponse(json_data, status=200)
+            # return JsonResponse({'message': 'Error 400'}, status=400)
     return redirect('cart:home')
 
 def checkout_home(request):

@@ -29,8 +29,90 @@
     
     <script>
       $(document).ready(function(){
-        var productForm = $(".form-product-ajax")
+        // COntact form handler
+        var contactForm = $('.contact-form')
+        var contactFormMethod = contactForm.attr('method')
+        var contactFormEndpoint = contactForm.attr('action')
+        
 
+        function displaySubmitting(submitBtn, defaultText, doSubmit){
+          if (doSubmit){
+            submitBtn.addClass('disabled')
+            submitBtn.html('<i class="fa fa-spin fa-spinner" aria-hidden="true"></i>Sending...')
+          } else {
+            submitBtn.removeClass('disabled')
+            submitBtn.html(defaultText)
+          }
+        }
+
+        contactForm.submit(function(event){
+          event.preventDefault()
+
+          var contactFormSubmitBtn = contactForm.find("[type='submit']")
+          var contactFormSubmitBtnTxt = contactFormSubmitBtn.text()
+
+          var contactFormData = contactForm.serialize()
+          thisForm = $(this)
+          displaySubmitting(contactFormSubmitBtn, "", true)
+          $.ajax({
+            method: contactFormMethod,
+            url: contactFormEndpoint,
+            data: contactFormData,
+            success: function(data){
+              thisForm[0].reset()
+              alert(data.message)
+              setTimeout(function(){
+                displaySubmitting(contactFormSubmitBtn, contactFormSubmitBtnTxt, false)
+              }, 500)
+            },
+            error: function(error){
+              console.log(error)
+              var jsonData = error.responseJSON
+              var msg = ''
+
+              $.each(jsonData, function(key, value){
+                msg += key + ': ' + value[0].message + '<br/>'
+              })
+              alert(msg)
+              setTimeout(function(){
+                displaySubmitting(contactFormSubmitBtn, contactFormSubmitBtnTxt, false)
+              }, 500)
+            }
+          })
+        })
+
+
+
+        // Seach form
+        var searchForm = $('.search-form')
+        var searchInput = searchForm.find("[name='q']")
+        var typingTimer;
+        var typingInterval = 500
+        var searchBtn = searchForm.find("[type='submit']")
+
+        searchInput.keyup(function(event){
+          //key release 
+          searchBtn.addClass('disabled')
+          searchBtn.html('<i class="fa fa-spin fa-spinner" aria-hidden="true"></i>Searching...')
+          clearTimeout(typingTimer)
+          typingTimer = setTimeout(performSearch, typingInterval)
+        })
+
+        searchInput.keydown(function(event){
+          //key pressed
+          clearTimeout(typingTimer)
+        })
+
+        function performSearch(){
+          var query = searchInput.val()
+          window.location.href = '/search/?q=' + query
+        }
+
+
+
+        // Cart + Add products
+        var productForm = $(".form-product-ajax")
+ 
         productForm.submit(function(event){
           event.preventDefault();
           console.log("form is not sending")
@@ -64,6 +146,7 @@
             },
 
             error: function(errorData){
+              alert("An error occured")
               console.log("error")
               console.log(errorData)
             }
@@ -79,7 +162,7 @@
           var currentUrl = window.location.href
 
           var refreshCartUrl = '/api/cart'
-          refreshCartMethond = 'GET'
+          var refreshCartMethond = 'GET'
           var data = {}
 
           $.ajax({
