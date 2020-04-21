@@ -26,12 +26,12 @@ from addresses.views import checkout_address_create_view, checkout_address_reuse
 
 urlpatterns = [
     path('contact/', views.contact_page, name='contact'),
-    path('login/', acc_view.login_page, name='login'),
+    path('login/', acc_view.LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('api/cart/', cart_view.cart_detail_api_view, name='api-cart'),
     path('checkout/address/create/', checkout_address_create_view, name='checkout_address_create'),
     path('checkout/address/reuse/', checkout_address_reuse_view, name='checkout_address_reuse'),
-    path('register/', acc_view.register_page, name='register'),
+    path('register/', acc_view.RegisterView.as_view(), name='register'),
     path('register/guest/', acc_view.guest_register_view, name='guest_register'),
     path('admin/', admin.site.urls),
     path('products/', include('product.urls')),
