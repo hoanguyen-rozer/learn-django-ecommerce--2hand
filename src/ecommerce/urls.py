@@ -23,6 +23,7 @@ from . import views
 from carts import views as cart_view
 from accounts import views as acc_view
 from addresses.views import checkout_address_create_view, checkout_address_reuse_view
+from billing.views import payment_method_view, payment_method_createview
 
 urlpatterns = [
     path('contact/', views.contact_page, name='contact'),
@@ -31,6 +32,8 @@ urlpatterns = [
     path('api/cart/', cart_view.cart_detail_api_view, name='api-cart'),
     path('checkout/address/create/', checkout_address_create_view, name='checkout_address_create'),
     path('checkout/address/reuse/', checkout_address_reuse_view, name='checkout_address_reuse'),
+    path('billing/payment-method', payment_method_view, name='billing_payment_method'),
+    path('billing/payment-method/create/', payment_method_createview, name='billing_payment_method_endpoint'),
     path('register/', acc_view.RegisterView.as_view(), name='register'),
     path('register/guest/', acc_view.guest_register_view, name='guest_register'),
     path('admin/', admin.site.urls),

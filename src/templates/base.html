@@ -11,6 +11,10 @@
     
     <!-- Fontawesome-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Stripe Handel styling-->
+    <link rel="stylesheet" href="{% static 'css/stripe_handle_style.css' %}">
+
     <title>Base Template</title>
   </head>
   <body>
@@ -20,7 +24,7 @@
           
       {% endblock content %}
     </div>
-        
+
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -32,10 +36,14 @@
     <script src="{% static 'js/csrf.ajax.js' %}"></script>
 
     <!-- Ecommerce Custom js -->
-    <script src="{% static 'js/ecommerce.js' %}">      
+    <script src="{% static 'js/ecommerce.js' %}"></script>
 
-    </script>
+    <!-- Stripe Handle-->
+    <script src="https://js.stripe.com/v3/"></script>
+
+    {% block js %}
     
+    {% endblock js %}  
   
   </body>
 </html>
