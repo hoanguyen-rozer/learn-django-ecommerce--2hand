@@ -56,6 +56,12 @@ class BillingProfile(models.Model):
             return default_cards.first()
         return None
 
+    def set_card_inactive(self):
+        card_qs = self.get_card()
+        card_qs.update(active=False)
+        return card_qs.filter(active=True).count()
+
+
 def billing_profile_create_receiver(sender, instance, *args, **kwargs):
     if not instance.customer_id and instance.email:
         print("ACTUAL API REQUEST Send to Stripe/BrainTree")
