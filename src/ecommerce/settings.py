@@ -34,6 +34,11 @@ AUTH_USER_MODEL = 'accounts.User'
 FORCE_SESSION_TO_ONE = False
 FORCE_INACTIVE_USER_ENDSESSION = False
 
+# STRIPE KEY 
+STRIPE_SECRET_KEY = 'sk_test_u7cis2zbqN2oQmy7SflQuu1X00iCYdUUXf'
+
+STRIPE_PUB_KEY = 'pk_test_W1bM1qmnrcOQ780IojSHaUcY00AOjvrMTI'
+
 # Application definition
 
 INSTALLED_APPS = [
