@@ -53,3 +53,37 @@ def user_created_receiver(sender, instance, created, *args, **kwargs):
         BillingProfile.objects.get_or_create(user=instance, email=instance.email)
 
 post_save.connect(user_created_receiver, sender=User)
+
+
+class CardManager(models.Manager):
+
+    def add_new(self, billing_profile, stripe_card_response):
+        if str(stripe_card_response.object) == 'card':
+            new_card = self.model(
+                billing_profile=billing_profile,
+                stripe_id=stripe_card_response.id,
+                brand=stripe_card_response.brand,
+                country=stripe_card_response.country,
+                exp_year=stripe_card_response.exp_year,
+                exp_month=stripe_card_response.exp_month,
+                last4=stripe_card_response.last4
+            )
+            new_card.save()
+            return new_card
+        return None
+
+
+class Card(models.Model):
+    billing_profile = models.ForeignKey(BillingProfile, on_delete=models.DO_NOTHING)
+    stripe_id = models.CharField(max_length=120)
+    brand = models.CharField(max_length=120, null=True, blank=True)
+    country = models.CharField(max_length=20, null=True, blank=True)
+    exp_month = models.IntegerField(null=True, blank=True)
+    exp_year = models.IntegerField(null=True, blank=True)
+    last4 = models.CharField(max_length=4, null=True, blank=True)
+    default = models.BooleanField(default=True)
+
+    objects = CardManager()
+
+    def __str__(self):
+        return f"{self.brand} {self.last4}"

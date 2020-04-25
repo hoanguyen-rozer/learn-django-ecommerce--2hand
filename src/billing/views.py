@@ -4,7 +4,7 @@ from django.utils.http import is_safe_url
 
 import stripe
 from django.http import HttpResponse, JsonResponse
-from .models import BillingProfile
+from .models import BillingProfile, Card
 
 stripe.api_key = 'sk_test_u7cis2zbqN2oQmy7SflQuu1X00iCYdUUXf'
 
@@ -37,6 +37,8 @@ def payment_method_createview(request):
             return HttpResponse({'message': 'Cannot find this user'}, status_code=401)
         token = request.POST.get('token')
         if token is not None:
-            stripe.Customer.create_source(billing_profile.customer_id, source=token, )
+            card_response = stripe.Customer.create_source(billing_profile.customer_id, source=token, )
+            new_card_obj = Card.objects.add_new(billing_profile, card_response)
+            print(new_card_obj)
         return JsonResponse({'message': 'Done'})
     return HttpResponse({'message': 'error'}, status_code=401)
