@@ -66,21 +66,75 @@ card.addEventListener('change', function(event) {
 });
 
 // Handle form submission.
-var form = document.getElementById('payment-form');
-form.addEventListener('submit', function(event) {
+// var form = document.getElementById('payment-form');
+// form.addEventListener('submit', function(event) {
+//   event.preventDefault();
+
+//   var loadTime = 1000
+//   var errorHtml = '<i class="fa fa-warning"></i>An error occured'
+//   var errorClasses = "btn btn-danger disabled my-3"
+//   var loadingHtml = '<i class="fa fa-spin fa-spinner"></i>Loading...'
+//   var loadingClasses = "btn btn-success disabled my-3"
+
+//   stripe.createToken(card).then(function(result) {
+//     if (result.error) {
+//       // Inform the user if there was an error.
+//       var errorElement = document.getElementById('card-errors');
+//       errorElement.textContent = result.error.message;
+//     } else {
+//       // Send the token to your server.
+//       stripeTokenHandler(nextUrl, result.token);
+//     }
+//   });
+// });
+
+var form = $('#payment-form');
+form.on('submit', function(event) {
   event.preventDefault();
+
+  var thisForm = $(this)
+  var btnLoad = thisForm.find('.btn-load')
+  btnLoad.blur()
+  var loadTime = 1000
+  var currentTimeout;
+  var errorHtml = '<i class="fa fa-warning"></i>An error occured'
+  var errorClasses = "btn btn-danger disabled my-3"
+  var loadingHtml = '<i class="fa fa-spin fa-spinner"></i>Loading...'
+  var loadingClasses = "btn btn-success disabled my-3"
 
   stripe.createToken(card).then(function(result) {
     if (result.error) {
       // Inform the user if there was an error.
-      var errorElement = document.getElementById('card-errors');
+      var errorElement = $('#card-errors');
       errorElement.textContent = result.error.message;
+      currentTimeout = displayBtnStatus(btnLoad, errorHtml, errorClasses, 1000, currentTimeout)
+
     } else {
       // Send the token to your server.
       stripeTokenHandler(nextUrl, result.token);
+      currentTimeout = displayBtnStatus(btnLoad, loadingHtml, loadingClasses, 2000, currentTimeout)
     }
   });
 });
+
+function displayBtnStatus(element, newHtml, newClasses, loadTime, timeout){
+  if (timeout){
+    clearTimeout(timeout)
+  }
+  if (!loadTime){
+    loadTime = 1200
+  }
+  var defaultHtml = element.html()
+  var defaultClasses = element.attr("class")
+  element.html(newHtml)
+  element.removeClass(defaultClasses)
+  element.addClass(newClasses)
+  return setTimeout(function(){
+    element.html(defaultHtml)
+    element.removeClass(newClasses)
+    element.addClass(defaultClasses)  
+  }, loadTime)
+}
 
 // Submit the form with the token ID.
 function stripeTokenHandler(nextUrl, token) {

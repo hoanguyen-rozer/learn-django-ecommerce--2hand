@@ -5,6 +5,7 @@ from django.contrib.auth import settings
 from accounts.models import GuestEmail
 
 import stripe
+from django.urls import reverse
 
 stripe.api_key = 'sk_test_u7cis2zbqN2oQmy7SflQuu1X00iCYdUUXf'
 
@@ -44,6 +45,9 @@ class BillingProfile(models.Model):
     def get_card(self):
         return self.card_set.all()
 
+    def get_payment_method_url(self):
+        return reverse('billing_payment_method')
+
     @property
     def has_card(self):
         card_qs = self.get_card()
@@ -51,7 +55,7 @@ class BillingProfile(models.Model):
 
     @property
     def default_card(self):
-        default_cards = self.get_card().filter(default=True)
+        default_cards = self.get_card().filter(active=True, default=True)
         if default_cards.exists():
             return default_cards.first()
         return None
@@ -118,6 +122,14 @@ class Card(models.Model):
 
     def __str__(self):
         return f"{self.brand} {self.last4}"
+
+def new_card_post_save_receiver(instance, created, *args, **kwargs):
+    if instance.default:
+        billing_profile = instance.billing_profile
+        qs = Card.objects.filter(billing_profile=billing_profile).exclude(pk=instance.pk)
+        qs.update(default=False)
+            
+post_save.connect(new_card_post_save_receiver, sender=Card)
 
 
 class ChargeManager(models.Manager):
