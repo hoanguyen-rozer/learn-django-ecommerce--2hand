@@ -24,6 +24,7 @@ from carts import views as cart_view
 from accounts import views as acc_view
 from addresses.views import checkout_address_create_view, checkout_address_reuse_view
 from billing.views import payment_method_view, payment_method_createview
+from marketing import views as marketing_view
 
 urlpatterns = [
     path('contact/', views.contact_page, name='contact'),
@@ -40,6 +41,7 @@ urlpatterns = [
     path('products/', include('product.urls')),
     path('search/', include('search.urls')),
     path('cart/', include('carts.urls')),
+    path('settings/email/', marketing_view.MarketingPreferenceUpdateView.as_view(), name='marketing_pref'),
 ]
 
 if settings.DEBUG:
