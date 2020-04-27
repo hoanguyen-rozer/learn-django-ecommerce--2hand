@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+from ecommerce import basesettings
+
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -39,6 +41,11 @@ STRIPE_SECRET_KEY = 'sk_test_u7cis2zbqN2oQmy7SflQuu1X00iCYdUUXf'
 
 STRIPE_PUB_KEY = 'pk_test_W1bM1qmnrcOQ780IojSHaUcY00AOjvrMTI'
 
+# MAILCHIMP
+MAILCHIMP_API_KEY           = getattr(basesettings, 'MAILCHIMP_API_KEY')
+MAILCHIMP_DATA_CENTER       = getattr(basesettings, 'MAILCHIMP_DATA_CENTER')
+MAILCHIMP_EMAIL_LIST_ID     = getattr(basesettings, 'MAILCHIMP_EMAIL_LIST_ID')
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -59,6 +66,7 @@ INSTALLED_APPS = [
     'billing.apps.BillingConfig',
     'addresses.apps.AddressesConfig',
     'analytics.apps.AnalyticsConfig',
+    'marketing.apps.MarketingConfig',
 ]
 
 MIDDLEWARE = [

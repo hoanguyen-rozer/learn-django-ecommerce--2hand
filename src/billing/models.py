@@ -123,7 +123,7 @@ class Card(models.Model):
     def __str__(self):
         return f"{self.brand} {self.last4}"
 
-def new_card_post_save_receiver(instance, created, *args, **kwargs):
+def new_card_post_save_receiver(sender, instance, created, *args, **kwargs):
     if instance.default:
         billing_profile = instance.billing_profile
         qs = Card.objects.filter(billing_profile=billing_profile).exclude(pk=instance.pk)
