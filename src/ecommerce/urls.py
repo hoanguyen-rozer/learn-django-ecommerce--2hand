@@ -42,6 +42,8 @@ urlpatterns = [
     path('search/', include('search.urls')),
     path('cart/', include('carts.urls')),
     path('settings/email/', marketing_view.MarketingPreferenceUpdateView.as_view(), name='marketing_pref'),
+    path('webhooks/mailchimp/', marketing_view.MailchimpWebhookView.as_view(), name='webhooks_mailchimp'),
+
 ]
 
 if settings.DEBUG:
