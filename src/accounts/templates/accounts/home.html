@@ -3,5 +3,71 @@
 
 {% block content %}
     {{ request.user}}
+
+<div class="row">
+    <div class="col-12">
+        <h1>Account</h1><hr>
+    </div>
+
+
+<div class="col-12 col-md-3 my-2">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Support</h4>
+            <div class="list-group">
+                <a href="{% url 'about' %}" class="list-group-item">About</a>
+                <a href="{% url 'contact' %}" class="list-group-item">Contact</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-12 col-md-3 my-2">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Billing</h4>
+            <div class="list-group">
+                <a href="#" class="list-group-item">Orders</a>
+                <a href="#" class="list-group-item">Addresses</a>
+                <a href="{% url 'billing_payment_method' %}" class="list-group-item">Payment Methods</a>                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-12 col-md-3 my-2">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Preferences</h4>
+            <div class="list-group">
+                <a href="{% url 'marketing_pref' %}" class="list-group-item">Setting email</a>              
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-12 col-md-3 my-2">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">User detail</h4>
+            <div class="list-group">
+                <a href="#" class="list-group-item">Name</a>
+                <a href="#" class="list-group-item">Reset password</a>              
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-12 col-md-3 my-2">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">History</h4>
+            <div class="list-group">
+                <a href="#" class="list-group-item">Products</a>              
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 {% endblock content %}
     

@@ -32,6 +32,7 @@ urlpatterns = [
     path('account/', include('accounts.urls')),
     path('accounts/', RedirectView.as_view(url='/account/')),
     path('contact/', views.contact_page, name='contact'),
+    path('about/', views.contact_page, name='about'),
     path('login/', acc_view.LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('api/cart/', cart_view.cart_detail_api_view, name='api-cart'),
