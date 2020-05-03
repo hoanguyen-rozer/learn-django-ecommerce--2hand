@@ -101,6 +101,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
+LOGIN_URL = '/login/'
+LOGIN_URL_REDIRECT = '/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 # Database

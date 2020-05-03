@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
+from django.views.generic import TemplateView, RedirectView
 
 from . import views
 from carts import views as cart_view
@@ -25,8 +26,11 @@ from accounts import views as acc_view
 from addresses.views import checkout_address_create_view, checkout_address_reuse_view
 from billing.views import payment_method_view, payment_method_createview
 from marketing import views as marketing_view
+from product.views import ProductListView
 
 urlpatterns = [
+    path('account/', include('accounts.urls')),
+    path('accounts/', RedirectView.as_view(url='/account/')),
     path('contact/', views.contact_page, name='contact'),
     path('login/', acc_view.LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
@@ -39,10 +43,12 @@ urlpatterns = [
     path('register/guest/', acc_view.guest_register_view, name='guest_register'),
     path('admin/', admin.site.urls),
     path('products/', include('product.urls')),
+    path('', ProductListView.as_view(), name='home_page'),
     path('search/', include('search.urls')),
     path('cart/', include('carts.urls')),
+    path('settings/', RedirectView.as_view(url='/account/')),
     path('settings/email/', marketing_view.MarketingPreferenceUpdateView.as_view(), name='marketing_pref'),
-    path('webhooks/mailchimp/', marketing_view.MailchimpWebhookView.as_view(), name='webhooks_mailchimp'),
+    # path('webhooks/mailchimp/', marketing_view.MailchimpWebhookView.as_view(), name='webhooks_mailchimp'),
 
 ]
 
