@@ -30,7 +30,8 @@ from product.views import ProductListView
 
 urlpatterns = [
     path('account/', include('accounts.urls')),
-    path('accounts/', RedirectView.as_view(url='/account/')),
+    # path('accounts/', RedirectView.as_view(url='/account/')),
+    path('accounts/', include('accounts.password.urls')),
     path('contact/', views.contact_page, name='contact'),
     path('about/', views.contact_page, name='about'),
     path('login/', acc_view.LoginView.as_view(), name='login'),
