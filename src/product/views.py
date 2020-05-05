@@ -6,6 +6,7 @@ from django.http import Http404
 from .models import Product
 from carts.models import Cart
 from analytics.mixins import ObjectViewedMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class ProductFeaturedListView(ListView):
     template_name = 'product/list.html'
@@ -21,7 +22,27 @@ class ProductFeaturedDetailView(ObjectViewedMixin, DetailView):
     def get_queryset(self, *args, **kwargs):
         request = self.request
         return Product.objects.all().featured()
-     
+
+
+class UserProductHistoryView(LoginRequiredMixin, ListView):
+    # queryset = Product.objects.all()
+    template_name = 'product/list.html'
+
+    # def get_context_data(self, *args, **kwargs):
+    #     context = super().get_context_data(*args, **kwargs)
+    #     return context
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        cart_obj, new_obj = Cart.objects.new_or_get(self.request)
+        context['cart'] = cart_obj 
+        return context
+
+    def get_queryset(self, *args, **kwargs):
+        request = self.request
+        views = request.user.objectviewed_set.by_model(Product)
+        viewed_ids = [x.object_id for x in views]
+        return Product.objects.all().filter(pk__in=viewed_ids)  
 
 
 class ProductListView(ListView):

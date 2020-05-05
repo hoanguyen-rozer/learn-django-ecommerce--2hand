@@ -15,6 +15,21 @@ User = settings.AUTH_USER_MODEL
 FORCE_SESSION_TO_ONE = getattr(settings, 'FORCE_SESSION_TO_ONE', False)
 FORCE_INACTIVE_USER_ENDSESSION = getattr(settings, 'FORCE_INACTIVE_USER_ENDSESSION', False)
 
+
+class ObjectViewedQuerySet(models.query.QuerySet):
+    def by_model(self, model_class):
+        c_type = ContentType.objects.get_for_model(model_class)
+        return self.filter(content_type=c_type)
+
+
+class ObjectViewedManager(models.Manager):
+    def get_queryset(self):
+        return ObjectViewedQuerySet(self.model, using=self._db)
+
+    def by_model(self, model_class):
+        return self.get_queryset().by_model(model_class)
+
+
 class ObjectViewed(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING)
     ip_address = models.CharField(max_length=220, null=True, blank=True)
@@ -25,6 +40,8 @@ class ObjectViewed(models.Model):
     #product = models.ForeignKey(Product) # id = 1, product_id.objectviewed_set.all()
     # order = models.ForeignKey(Order)
     #url 
+
+    objects = ObjectViewedManager()
 
     def __str__(self):
         return '%s viewed on %s' %(self.content_objects, self.timestamp) # most recent save show up first
